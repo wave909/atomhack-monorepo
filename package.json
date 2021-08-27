@@ -1,0 +1,15 @@
+{
+  "name": "atomhack-monorepo",
+  "version": "1.0.0",
+  "private": true,
+  "scripts": {
+    "web": "yarn workspace web start"
+  },
+  "workspaces": {
+    "packages": [
+      "packages/*"
+    ],
+    "nohoist": [
+    ]
+  }
+}
