@@ -8,5 +8,12 @@ module.exports = function override(config, env) {
     new webpack.DefinePlugin({ __DEV__: env !== 'production' }),
   )
 
+  config.module.rules.push(
+    {
+      test: /\.dot$/,
+      loader: 'raw-loader',
+    },
+  );
+
   return config
 }
