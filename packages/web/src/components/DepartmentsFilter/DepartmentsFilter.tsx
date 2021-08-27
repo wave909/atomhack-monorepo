@@ -1,14 +1,10 @@
 import React, { useState } from 'react'
 import style from './DepartmentsFilter.module.scss'
 import CheckIcon from '../../img/check-icon.svg'
+import {Department} from "../DepartmentCard/department";
 
 interface WithClassName {
   className?: string
-}
-
-export interface department {
-  title: string
-  type: string
 }
 
 export const DepartmentsFilter = ({
@@ -18,9 +14,9 @@ export const DepartmentsFilter = ({
   onDepartmentChoose,
   onReset,
 }: {
-  departmentsList: department[]
-  chosenDepartments: department[]
-  onDepartmentChoose: (department: department) => void
+  departmentsList: Department[]
+  chosenDepartments: Department[]
+  onDepartmentChoose: (department: Department) => void
   onReset: () => void
 } & WithClassName) => {
   const [filterString, setFilterString] = useState('')

@@ -1,10 +1,32 @@
-import React, {useState} from 'react'
-import {department, DepartmentsFilter} from "../DepartmentsFilter/DepartmentsFilter";
+import React, {useEffect, useState} from 'react'
+import { DepartmentsFilter} from "../DepartmentsFilter/DepartmentsFilter";
 import {departmentList} from "./departmentList";
 import style from './DepartmentTree.module.scss'
+import {DepartmentCard} from "../DepartmentCard/DepartmentCard";
+import {Department, testDepartment} from "../DepartmentCard/department";
 
 export const DepartmentsTree = () => {
-  const [chosenDepartments, setChosenDepartments] = useState<department[]>([])
+  const [chosenDepartments, setChosenDepartments] = useState<Department[]>([])
+
+  const [graphvizBuf, setGraphvizBuf] = useState([])
+  useEffect( () => {
+    chosenDepartments.sort((a, b) => a.path.length > b.path.length ? 1 : -1)
+
+    const newGraphvizBuf: any = []
+    const nodes = {}
+    chosenDepartments.forEach(chosenDepartment => {
+      let last = nodes;
+      for(const index of chosenDepartment.path) {
+        last = (last[index] ??= {parent: last})
+      }
+      const node: any = last
+      node.title = chosenDepartment.title
+      newGraphvizBuf.push(`"${node.parent?.title || "root"}" -> "${node.title}"`)
+    } )
+    setGraphvizBuf(newGraphvizBuf)
+  }, [chosenDepartments])
+
+
   return <div className={style['page-wrapper']}>
     <DepartmentsFilter
       onReset={() => setChosenDepartments([])}
@@ -25,9 +47,13 @@ export const DepartmentsTree = () => {
     />
 
     <div className={style['right-column']}>
-      {chosenDepartments.map((department) => (
-        <div>{department.title}</div>
+      {graphvizBuf.map((edge) => (
+        <div>{edge}</div>
       ))}
+
+      <DepartmentCard department={testDepartment}/>
+
+      {/*<EmployeeCard />*/}
     </div>
   </div>
 }
