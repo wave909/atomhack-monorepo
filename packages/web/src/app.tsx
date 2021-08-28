@@ -9,8 +9,10 @@ import ChatWidget from "./classifier-widget";
 const App = () => {
   return <BrowserRouter>
     <ReduxProvider store={store}>
-      <Route path="/" component={DepartmentsTree}/>
-      <Route path="/classifier" component={ChatWidget}/>
+      <Switch>
+        <Route path="/classifier" component={ChatWidget}/>
+        <Route path="/" component={DepartmentsTree}/>
+      </Switch>
     </ReduxProvider>
   </BrowserRouter>
 };
