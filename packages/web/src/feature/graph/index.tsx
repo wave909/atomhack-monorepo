@@ -15,10 +15,8 @@ export default function GraphScreen({graphvizBuf}: { graphvizBuf: [{ title: stri
     e.stopPropagation()
     e.preventDefault()
 
-    const id = e.path && e.path[1]?.id
-    const title = e.path && e.path[1]?.children?.item(0)?.textContent
-    console.log("ON NODE CLICK", id)
-    if (title) {
+    const id = e.target?.parentNode?.id
+    if (id) {
       setSelectedNode(departmentList.find(department => department.title === id))
     }
   }, [])
@@ -77,7 +75,7 @@ export default function GraphScreen({graphvizBuf}: { graphvizBuf: [{ title: stri
       ${
       graphvizBuf
         .map(([edgeFrom, edgeTo]) => {
-          return `"${lineBreak(edgeFrom.title)}" -> "${lineBreak(edgeTo.title)}" [id="${edgeFrom}_${edgeTo}"]`
+          return `"${lineBreak(edgeFrom.title)}" -> "${lineBreak(edgeTo.title)}"`
         })
         .join('\n')
       }
