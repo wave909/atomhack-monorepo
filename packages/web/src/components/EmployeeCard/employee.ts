@@ -1,13 +1,22 @@
 import {Department, testDepartment} from "../DepartmentCard/department";
 
 export interface Employee {
+  id: number
   name: string
   position: string
   department: Department
 }
 
-export const testEmployee: Employee = {
-  name: 'Сотрудник Сотрудников',
+export const testEmployee1: Employee = {
+  id: 1,
+  name: 'Иван Иванов',
+  position: 'Сотрудник',
+  department: testDepartment
+}
+
+export const testEmployee2: Employee = {
+  id: 2,
+  name: 'Петр Петров',
   position: 'Работник',
   department: testDepartment
 }

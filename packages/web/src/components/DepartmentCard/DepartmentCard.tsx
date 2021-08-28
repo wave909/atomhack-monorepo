@@ -1,14 +1,17 @@
-import React from "react";
+import React, {useState} from "react";
 import {Department} from "./department";
 import style from './DepartmentCard.module.scss'
 import {Card, Paper} from "@material-ui/core";
 import {EmployeeCard} from "../EmployeeCard/EmployeeCard";
 import {testTask} from "../TaskCard/task";
 import {TaskCard} from "../TaskCard/TaskCard";
+import {Employee} from "../EmployeeCard/employee";
 
 export const DepartmentCard = ({department}: {department: Department}) => {
 
   const tasks = [testTask, testTask, testTask, testTask, testTask, testTask,]
+
+  const [selectedEmployee, setSelectedEmployee] = useState<Employee>()
 
   return <div className={style['department-card']}>
 
@@ -28,9 +31,12 @@ export const DepartmentCard = ({department}: {department: Department}) => {
 
     </div>
 
-    <div className={style['description']}>
-      {department.description}
-    </div>
+    {
+      department.description &&
+      <div className={style['description']}>
+        {department.description}
+      </div>
+    }
 
     <div className={style['columns']}>
 
@@ -41,7 +47,16 @@ export const DepartmentCard = ({department}: {department: Department}) => {
           <div className={style['list']}>
             {
               department.employees.map(employee =>
-                <EmployeeCard employee={employee}/>
+                <EmployeeCard selected={selectedEmployee && selectedEmployee.id === employee.id}
+                              onClick={() => {
+                                if(selectedEmployee && selectedEmployee.id === employee.id){
+                                  setSelectedEmployee(undefined)
+                                } else{
+                                  setSelectedEmployee(employee)
+                                }
+
+                              }}
+                              employee={employee}/>
               )
             }
           </div>

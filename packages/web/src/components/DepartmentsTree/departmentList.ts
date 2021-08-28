@@ -1,4 +1,5 @@
 import {Department} from "../DepartmentCard/department";
+import {testEmployee1, testEmployee2} from "../EmployeeCard/employee";
 
 export const findByPath = (path: string[]) => {
   return departmentList.find(department =>
@@ -11,7 +12,7 @@ export const departmentList: Department[] = [
   {
     title: 'Аппарат главы администрации Сосновоборского городского округа',
     description: '',
-    employees: [],
+    employees: [testEmployee1, testEmployee2],
     path: ['1']
 
   },

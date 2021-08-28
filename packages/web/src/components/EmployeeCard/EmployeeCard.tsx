@@ -3,9 +3,10 @@ import {Card} from "@material-ui/core";
 import style from "./EmployeeCard.module.scss";
 import {Employee} from "./employee";
 
-export const EmployeeCard = ({employee}: { employee: Employee }) => {
+export const EmployeeCard = ({employee, selected, onClick}:
+                               { employee: Employee , selected?: boolean, onClick: () => void}) => {
 
-  return <Card className={style['employee']}>
+  return <Card onClick={onClick} className={`${style['employee']}`} raised={selected}>
     <div className={style['employee__photo']}/>
     <div className={style['employee__info']}>
       <div className={style['employee__name']}> {employee.name} </div>
