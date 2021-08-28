@@ -60,7 +60,7 @@ router.get("/shedule/:id",(ctx,next)=>{
 
 })
 router.get("/tasks/:id",(ctx,next)=>{
-  return tasks.filter(item=>item.groupId===ctx.params.id)
+  ctx.body= tasks.filter(item=>item)
 })
 router.post("/tasks",(ctx,next)=>{
   let newTasks = ctx.request.body
