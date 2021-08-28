@@ -19,7 +19,7 @@ export const SheduleManager = () => {
 
     curDate&&setGantt(convertSheduleToGantt(shedule,curDate))
 
-  }, [shedule])
+  }, [shedule,currentDate])
   console.log(gantt)
   return <div>
     <input value={currentDate} onChange={(e) => setCurrentDate(e.target.value)}/>
@@ -32,12 +32,12 @@ export const SheduleManager = () => {
       const taskDueDate = new Date(taskDate)
       const _taskTime = taskTime * 60 * 60 * 1000
       console.log(taskDate, taskDueDate)
-      axios.create({baseURL:"http://localhost:1338"}).put("/shedule",{shedule,task:{
+      axios.create({baseURL:process.env.REACT_APP_BASE_PATH}).put("/shedule",{shedule,tasks:[{
           id: taskTitle,
           dueDate: taskDueDate.getTime(),
           time: _taskTime,
-          isBreakable:!!taskBreakable
-        },currentDate: curDate.getTime()}).then(({data})=>data.newShedule&& setShedule?.(data.newShedule)).catch((e)=>{})
+          isBreakable: !!taskBreakable
+        }],currentDate: curDate.getTime()}).then(({data})=>data.newShedule&& setShedule?.(data.newShedule)).catch((e)=>{})
     }}>Добваить задачу</button>
     <Mermaid chart={gantt}/>
   </div>
@@ -46,9 +46,11 @@ const convertSheduleToGantt = (shedule: Shedule,currentDate) => {
   return "gantt \n title A Gantt Diagram\n" +
     "axisFormat  %Y-%m-%d-%H \n"+
     "dateFormat  YYYY-MM-DD HH:mm:ss.ms \n" + Object.entries(shedule).map(([key, machine]) => {
-      const tasks = `today:${currentDate.toISOString().split("Z")[0].split("T").join(" ")},${currentDate.toISOString().split("Z")[0].split("T").join(" ")}  \n`+machine.tasks.map(it => `${new Date(it.dueDate).toISOString().split(":")[0]+(it.part?"Part"+it.part:"")} : ${new Date(it.start).toISOString().split("Z")[0].split("T").join(" ")}, ${new Date(it.end).toISOString().split("Z")[0].split("T").join(" ")} `).join("\n")
+      const tasks = `today:${currentDate.toISOString().split("Z")[0].split("T").join(" ")},${currentDate.toISOString().split("Z")[0].split("T").join(" ")}  \n`+
+        machine.tasks.map(it => `${new Date(it.dueDate).toISOString().split(":")[0]+(it.part?"Part"+it.part:"")} : ${new Date(it.start).toISOString().split("Z")[0].split("T").join(" ")}, ${new Date(it.end).toISOString().split("Z")[0].split("T").join(" ")} `).join("\n")
       return [key, tasks]
     }).map(it => {
       return `section ${it[0]} \n` + it[1]
     }).join("\n")
+
 }

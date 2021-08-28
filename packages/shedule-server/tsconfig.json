@@ -1,11 +1,12 @@
 {
 
   "compilerOptions": {
+    "isolatedModules": true,
+    "skipLibCheck": true,
 
     "module": "commonjs",
 
     "esModuleInterop": true,
-
     "target": "ES6",
 
     "moduleResolution": "node",
