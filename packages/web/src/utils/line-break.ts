@@ -2,8 +2,8 @@ export default function lineBreak(text: string, maxLength: number = 20, separate
   let newText = ""
   let separatedWords = ""
 
-  text.split(separate)
-    .forEach(separatedWord => {
+  text?.split(separate)
+    ?.forEach(separatedWord => {
       separatedWords += separatedWord + separate
       if (separatedWords.length >= maxLength) {
         newText += separatedWords + '\n'

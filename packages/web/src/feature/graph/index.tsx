@@ -12,8 +12,8 @@ export default function GraphScreen({graphvizBuf}: { graphvizBuf: [{ title: stri
     e.stopPropagation()
     e.preventDefault()
 
-    const id = e.path[1]?.id
-    const title = e.path[1]?.children?.item(0)?.textContent
+    const id = e.path && e.path[1]?.id
+    const title = e.path && e.path[1]?.children?.item(0)?.textContent
     console.log("ON NODE CLICK", id)
     if (title) {
       setSelectedNode(title)
