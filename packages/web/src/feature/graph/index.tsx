@@ -17,7 +17,7 @@ export default function GraphScreen({graphvizBuf}: { graphvizBuf: [{ title: stri
 
     const id = e.target?.parentNode?.id
     if (id) {
-      setSelectedNode(departmentList.find(department => department.title === id))
+      setSelectedNode(departmentList.find(department => department.title === title))
     }
   }, [])
 
