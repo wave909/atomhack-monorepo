@@ -45,7 +45,7 @@ export default function GraphScreen({graphvizBuf}: {graphvizBuf: string}) {
     return function () {
       cleanNodeClickEvent()
     }
-  }, [graphRef])
+  }, [graphRef, graphvizBuf])
 
   return <div ref={graphRef}/>
 }
