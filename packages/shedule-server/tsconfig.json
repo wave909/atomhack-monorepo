@@ -1,0 +1,23 @@
+{
+
+  "compilerOptions": {
+
+    "module": "commonjs",
+
+    "esModuleInterop": true,
+
+    "target": "ES6",
+
+    "moduleResolution": "node",
+
+    "sourceMap": true,
+    "allowJs": true,
+    "outDir": "dist",
+    "lib": ["ESNext"]
+  },
+  "include": ["src"],
+  "exclude": [
+    "generated",
+    "public/utils"
+  ]
+}
