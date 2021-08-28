@@ -1,58 +1,75 @@
 .department-card{
-  width: 600px;
-  height: 400px;
-  background-color: #d9d9d9;
+  width: 1000px;
+
+  background-color: #97bde8;
   padding: 20px;
   border-radius: 10px;
 
-  margin: 20px;
 
-  .container{
-    display: flex;
+  display: flex;
+  flex-direction: column;
 
-
-    .left-column{
-      width: 100%;
-    }
-
-    .title{
-      font-size: 30px;
-      line-height: 36px;
-      margin-bottom: 20px;
-      font-weight: 500;
-    }
-
-    .description{
-      font-size: 18px;
-      line-height: 20px;
-    }
-
-
-    .photo{
-      width: 150px;
-      height: 200px;
-      flex-shrink: 0;
-      background-color: #ff6464;
-
-      display: flex;
-      justify-content: center;
-      align-items: center;
-    }
-
-  }
-
-  .employee-title{
-    font-size: 22px;
-    line-height: 24px;
+  .title{
+    text-align: center;
+    font-size: 30px;
+    padding: 10px;
     margin-bottom: 10px;
+    font-weight: 500;
   }
 
-  .employee-list{
+  .department-info{
     display: flex;
-    flex-direction: column;
-    overflow: scroll;
+    justify-content: center;
+    font-size: 18px;
 
-    height: 120px;
+    margin-bottom: 20px;
+
+    .employee-count{
+      margin-right: 10px;
+    }
+
+    .workload{
+      margin-left: 10px;
+    }
   }
+
+  .description{
+    font-size: 16px;
+    margin-bottom: 20px;
+  }
+
+  .columns{
+    height: 400px;
+    width: 100%;
+    display: flex;
+
+    .subtitle{
+      text-align: center;
+      padding: 4px;
+      font-size: 20px;
+      margin-bottom: 20px;
+    }
+
+    .employee-list{
+      display: flex;
+      flex-direction: column;
+      width: 65%;
+      padding-right: 10px;
+      border-right: 2px solid rgba(0, 0, 0, 0.3);
+    }
+
+    .task-list{
+      display: flex;
+      flex-direction: column;
+      width: 35%;
+      padding-left: 10px;
+    }
+
+    .list{
+      overflow: scroll;
+    }
+
+  }
+
 
 }

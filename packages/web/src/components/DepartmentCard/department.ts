@@ -1,4 +1,4 @@
-import {Employee, testEmployee} from "../EmployeeCard/employee";
+import {Employee, testEmployee1, testEmployee2} from "../EmployeeCard/employee";
 
 export interface Department {
   title: string
@@ -11,5 +11,5 @@ export const testDepartment: Department = {
   title: 'Отдел общественной безопасности',
   description: 'Данный отдел занимается обеспечением общественной безопасности',
   path: ['1','7','1'],
-  employees: [testEmployee, testEmployee]
+  employees: [testEmployee1, testEmployee2]
 }
