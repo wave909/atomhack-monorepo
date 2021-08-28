@@ -1,10 +1,15 @@
 import {Department} from "../DepartmentCard/department";
 
+export const findByPath = (path: string[]) => {
+  return departmentList.find(department =>
+    department.path.length === path.length &&
+    department.path.every((number, numberIdx) => number === path[numberIdx]))
+  }
+
 
 export const departmentList: Department[] = [
   {
     title: 'Аппарат главы администрации Сосновоборского городского округа',
-    type: 'committee',
     description: '',
     employees: [],
     path: ['1']
@@ -12,7 +17,6 @@ export const departmentList: Department[] = [
   },
   {
     title: 'Централизованная бухгалтерия',
-    type: 'department',
     description: '',
     employees: [],
     path: ['1', '1']
@@ -20,7 +24,6 @@ export const departmentList: Department[] = [
   },
   {
     title: 'Юридический отдел',
-    type: 'department',
     description: '',
     employees: [],
     path: ['1', '2']
@@ -28,7 +31,6 @@ export const departmentList: Department[] = [
   },
   {
     title: 'Отдел кадров и спецработы',
-    type: 'department',
     description: '',
     employees: [],
     path: ['1', '3']
@@ -37,7 +39,6 @@ export const departmentList: Department[] = [
   {
     title:
       'Комитет финансов администрации муниципального образования Сосновоборский городской округ Ленинградской области с правами юридического лица (Комитет финансов Сосновоборского городского округа)',
-    type: 'department',
     description: '',
     employees: [],
     path: ['1', '4']
@@ -46,7 +47,6 @@ export const departmentList: Department[] = [
   {
     title:
       'Отдел внутреннего муниципального финансового контроля и внутреннего финансового аудита.',
-    type: 'department',
     description: '',
     employees: [],
     path: ['1', '4','1']
@@ -55,7 +55,6 @@ export const departmentList: Department[] = [
   {
     title:
       'Комитет по управлению жилищно-коммунальным хозяйством, в состав которого входят следующие отраслевые (функциональные) органы:',
-    type: 'committee',
     description: '',
     employees: [],
     path: ['1', '5']
@@ -63,7 +62,6 @@ export const departmentList: Department[] = [
   },
   {
     title: 'Отдел жилищно-коммунального хозяйства',
-    type: 'department',
     description: '',
     employees: [],
     path: ['1', '5','1']
@@ -71,7 +69,6 @@ export const departmentList: Department[] = [
   },
   {
     title: 'Отдел капитального строительства',
-    type: 'department',
     description: '',
     employees: [],
     path: ['1', '5','2']
@@ -79,7 +76,6 @@ export const departmentList: Department[] = [
   },
   {
     title: 'Отдел внешнего благоустройства и дорожного хозяйства.',
-    type: 'department',
     description: '',
     employees: [],
     path: ['1', '5','3']
@@ -88,7 +84,6 @@ export const departmentList: Department[] = [
   {
     title:
       'Комитет по управлению муниципальным имуществом администрации муниципального образования Сосновоборский городской округ Ленинградской области с правами юридического лица (КУМИ Сосновоборского городского округа)',
-    type: 'committee',
     description: '',
     employees: [],
     path: ['1', '6']
@@ -96,7 +91,6 @@ export const departmentList: Department[] = [
   },
   {
     title: 'Жилищный отдел',
-    type: 'department',
     description: '',
     employees: [],
     path: ['1', '6','1']
@@ -104,7 +98,6 @@ export const departmentList: Department[] = [
   },
   {
     title: 'Отдел муниципального заказа',
-    type: 'department',
     description: '',
     employees: [],
     path: ['1', '6','2']
@@ -112,7 +105,6 @@ export const departmentList: Department[] = [
   },
   {
     title: 'Отдел экономического развития',
-    type: 'department',
     description: '',
     employees: [],
     path: ['1', '6','3']
@@ -120,7 +112,6 @@ export const departmentList: Department[] = [
   },
   {
     title: 'Комитет архитектуры, градостроительства и землепользования',
-    type: 'department',
     description: '',
     employees: [],
     path: ['1', '6','4']
@@ -129,7 +120,6 @@ export const departmentList: Department[] = [
   {
     title:
       'Отдел внутреннего муниципального финансового контроля и внутреннего финансового аудита',
-    type: 'department',
     description: '',
     employees: [],
     path: ['1', '6','5']
@@ -138,7 +128,6 @@ export const departmentList: Department[] = [
   {
     title:
       'Комитет по общественной безопасности и информации, в состав которого входят следующие отраслевые (функциональные) органы:',
-    type: 'committee',
     description: '',
     employees: [],
     path: ['1', '7']
@@ -146,7 +135,6 @@ export const departmentList: Department[] = [
   },
   {
     title: 'Отдел общественной безопасности',
-    type: 'department',
     description: '',
     employees: [],
     path: ['1', '7', '1']
@@ -154,7 +142,6 @@ export const departmentList: Department[] = [
   },
   {
     title: 'Отдел гражданской защиты',
-    type: 'department',
     description: '',
     employees: [],
     path: ['1', '7','2']
@@ -162,7 +149,6 @@ export const departmentList: Department[] = [
   },
   {
     title: 'Отдел по связям с общественностью (пресс-центр)',
-    type: 'department',
     description: '',
     employees: [],
     path: ['1', '7','3']
@@ -170,7 +156,6 @@ export const departmentList: Department[] = [
   },
   {
     title: 'Отдел информационных технологий и защиты информации.',
-    type: 'department',
     description: '',
     employees: [],
     path: ['1', '7','4']
@@ -178,7 +163,6 @@ export const departmentList: Department[] = [
   },
   {
     title: 'Отдел муниципального контроля',
-    type: 'committee',
     description: '',
     employees: [],
     path: ['1', '8']
@@ -186,7 +170,6 @@ export const departmentList: Department[] = [
   },
   {
     title: 'Отдел природопользования и экологической безопасности',
-    type: 'committee',
     description: '',
     employees: [],
     path: ['1', '9']
@@ -194,7 +177,6 @@ export const departmentList: Department[] = [
   },
   {
     title: 'Общий отдел',
-    type: 'committee',
     description: '',
     employees: [],
     path: ['1', '10']
@@ -202,7 +184,6 @@ export const departmentList: Department[] = [
   },
   {
     title: 'Архивный отдел',
-    type: 'committee',
     description: '',
     employees: [],
     path: ['1', '11']
@@ -210,8 +191,6 @@ export const departmentList: Department[] = [
   },
   {
     title: 'Административная комиссия',
-
-    type: 'committee',
     description: '',
     employees: [],
     path: ['1', '12']
@@ -220,8 +199,6 @@ export const departmentList: Department[] = [
   {
     title:
       'Комитет образования администрации муниципального образования Сосновоборский городской округ Ленинградской области с правами юридического лица (Комитет образования Сосновоборского городского округа)',
-
-    type: 'committee',
     description: '',
     employees: [],
     path: ['1', '13']
@@ -229,8 +206,6 @@ export const departmentList: Department[] = [
   },
   {
     title: 'Отдел социальных программ',
-
-    type: 'department',
     description: '',
     employees: [],
     path: ['1', '13','1']
@@ -238,8 +213,6 @@ export const departmentList: Department[] = [
   },
   {
     title: 'Отдел по развитию культуры и туризма',
-
-    type: 'department',
     description: '',
     employees: [],
     path: ['1', '13','2']
@@ -247,8 +220,6 @@ export const departmentList: Department[] = [
   },
   {
     title: 'Отдел по молодежной политике',
-
-    type: 'department',
     description: '',
     employees: [],
     path: ['1', '13','3']
@@ -256,8 +227,6 @@ export const departmentList: Department[] = [
   },
   {
     title: 'Отдел по физической культуре и спорту',
-
-    type: 'department',
     description: '',
     employees: [],
     path: ['1', '13','4']
@@ -265,8 +234,6 @@ export const departmentList: Department[] = [
   },
   {
     title: 'Отдел записи актов гражданского состояния (отдел ЗАГС)',
-
-    type: 'department',
     description: '',
     employees: [],
     path: ['1', '13','5']
@@ -274,8 +241,6 @@ export const departmentList: Department[] = [
   },
   {
     title: 'Отдел опеки и попечительства',
-
-    type: 'department',
     description: '',
     employees: [],
     path: ['1', '13','6']
@@ -284,8 +249,6 @@ export const departmentList: Department[] = [
   {
     title:
       'Отдел по обеспечению деятельности комиссии по делам несовершеннолетних и защите их прав.',
-
-    type: 'department',
     description: '',
     employees: [],
     path: ['1', '13','7']

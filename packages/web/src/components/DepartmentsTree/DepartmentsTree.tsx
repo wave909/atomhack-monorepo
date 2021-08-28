@@ -1,20 +1,32 @@
 import React, {useEffect, useState} from 'react'
 import { DepartmentsFilter} from "../DepartmentsFilter/DepartmentsFilter";
-import {departmentList} from "./departmentList";
+import {departmentList, findByPath} from "./departmentList";
 import style from './DepartmentTree.module.scss'
 import {DepartmentCard} from "../DepartmentCard/DepartmentCard";
-import {Department, testDepartment} from "../DepartmentCard/department";
+import {Department} from "../DepartmentCard/department";
 
 export const DepartmentsTree = () => {
   const [chosenDepartments, setChosenDepartments] = useState<Department[]>([])
-
   const [graphvizBuf, setGraphvizBuf] = useState([])
   useEffect( () => {
-    chosenDepartments.sort((a, b) => a.path.length > b.path.length ? 1 : -1)
+    const extendedDepartments = chosenDepartments.slice(0, chosenDepartments.length)
+      chosenDepartments.forEach(chosenDepartment => {
+      for(
+        let path = chosenDepartment.path.slice(0, chosenDepartment.path.length - 1);
+        path.length !== 0;
+        path = path.slice(0, path.length - 1)
+      ){
+        const foundDepartment = findByPath(path)
+        if(foundDepartment && !extendedDepartments.find(_department => _department.title === foundDepartment.title)){
+          extendedDepartments.push(foundDepartment)
+        }
+      }
+    })
+    extendedDepartments.sort((a, b) => a.path.length > b.path.length ? 1 : -1)
 
     const newGraphvizBuf: any = []
     const nodes = {}
-    chosenDepartments.forEach(chosenDepartment => {
+    extendedDepartments.forEach(chosenDepartment => {
       let last = nodes;
       for(const index of chosenDepartment.path) {
         last = (last[index] ??= {parent: last})
@@ -51,9 +63,6 @@ export const DepartmentsTree = () => {
         <div>{edge}</div>
       ))}
 
-      <DepartmentCard department={testDepartment}/>
-
-      {/*<EmployeeCard />*/}
     </div>
   </div>
 }
