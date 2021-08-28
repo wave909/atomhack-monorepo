@@ -1,5 +1,7 @@
 const Koa = require("koa")
 const cors = require("koa-cors")
+const Router = require("koa-router")
+const router = new Router()
 var bodyParser = require('koa-body-parser');
 const app = new Koa();
 const koaOptions = {
@@ -7,27 +9,49 @@ const koaOptions = {
   credentials: true
 };
 const {addTask} = require("./shedule-manager/index")
-const tasks={}
+export type Task= {
+  id:string,
+  description:string,
+  dueDate:number,
+  createDate:number,
+  groupId?:string
+}
+const tasks:Task[]=[]
+router.put("/shedule",(ctx,next)=>{
+  if(ctx.request.body.tasks&&Array.isArray(ctx.request.body.tasks)){
+    const tasks = ctx.request.body.tasks.sort((a,b)=>a.dueDate<b.dueDate?-1:1)
+    let shedule = ctx.request.body.shedule
+    const unsolvedTasks=[]
+    for(let task of tasks){
+      const newShedule = addTask(shedule,task,ctx.request.body.currentDate)
+      shedule=newShedule||shedule
+      if(!shedule){
+        unsolvedTasks.push(task)
+      }
+    }
+    ctx.body= {newShedule: shedule}
+  }else {
+    const newShedule = addTask(ctx.request.body.shedule, ctx.request.body.task, ctx.request.body.currentDate)
+    console.log(newShedule)
+    ctx.body = {newShedule}
+  }
+})
+router.get("/tasks/:id",(ctx,next)=>{
+  return tasks.filter(item=>item.groupId===ctx.params.id)
+})
+router.post("/tasks",(ctx,next)=>{
+  let newTasks = ctx.request.body
+  tasks.forEach((task,index,array)=>{
+    //TODO add naznachator
+    if(newTasks.find(it=>it.id===task.id)){
+      array[index]=newTasks.find(it=>it.id===task.id)
+      newTasks = newTasks.filter(it=>it.id!==task.id)
+    }
+    tasks.push(...newTasks)
+  })
+})
 app.use(cors(koaOptions))
 app.use(bodyParser());
-app.use(async ctx => {
-  console.log((ctx.request.url==="/shedule"),(ctx.request.method.toLowerCase()==="put"))
-  if((ctx.request.url==="/shedule")&&(ctx.request.method.toLowerCase()==="put")) {
-    console.log("WHAT")
-
-    try{
-      console.log(ctx.body)
-
-      const newShedule = addTask(ctx.request.body.shedule,ctx.request.body.task,ctx.request.body.currentDate)
-      console.log(newShedule)
-      ctx.body = {newShedule}
-    }catch (e) {
-      console.log(e)
-      ctx.response.statusCode=400
-    }
-  }else{
-    ctx.response.statusCode=404
-  }
-});
+app.use(router.routes())
 
 app.listen(1338);
