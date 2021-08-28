@@ -1,39 +1,43 @@
-import React, {useCallback, useEffect, useRef} from 'react';
+import React, {useCallback, useEffect, useRef, useState} from 'react';
 import {graphviz} from 'd3-graphviz';
 /* eslint import/no-webpack-loader-syntax: off */
 import StructureDot from '!!raw-loader!../../mock/structure.dot';
+import style from './style.module.scss'
 
 export default function GraphScreen() {
   const graphRef = useRef<HTMLDivElement>(null)
   const nodesRef = useRef<NodeListOf<SVGGElement>>()
+  const [selectedNode, setSelectedNode] = useState<string | null>(null)
 
   const onNodeClick = useCallback((e) => {
+    e.stopPropagation()
+    e.preventDefault()
+
     const title = e.target?.textContent
     console.log("ON CLICK", title)
+    if (title) {
+      setSelectedNode(title)
+    }
   }, [])
 
-  const cleanNodeClickEvent = () => {
-    if (nodesRef.current) {
-      nodesRef.current.forEach(node => {
-        node.removeEventListener("click", onNodeClick)
-      })
-    }
+  const onGraphClick = useCallback((e) => {
+    setSelectedNode(null)
+  }, [])
+
+  const cleanEvents = () => {
+    nodesRef.current?.forEach(node => {
+      node.removeEventListener("click", onNodeClick)
+    })
   }
 
   useEffect(() => {
     if (graphRef.current) {
       graphviz(graphRef.current)
         .options({
-          width: window.innerWidth,
-          height: window.innerHeight,
+          fade: true,
         })
         .renderDot(StructureDot, () => {
-          cleanNodeClickEvent()
-
-          const graph = graphRef.current?.querySelector<SVGGElement>(".graph")
-          graph?.addEventListener("wheel", (e) => {
-            console.log("SCALE", graph?.transform?.animVal?.getItem(1)?.matrix?.a)
-          })
+          cleanEvents()
 
           nodesRef.current = graphRef.current?.querySelectorAll(".node");
           nodesRef.current?.forEach(node => {
@@ -41,13 +45,20 @@ export default function GraphScreen() {
           })
         })
     } else {
-      cleanNodeClickEvent()
+      cleanEvents()
     }
 
     return function () {
-      cleanNodeClickEvent()
+      cleanEvents()
     }
   }, [graphRef])
 
-  return <div ref={graphRef}/>
+  return <div className={style['container']} onClick={onGraphClick}>
+    <div className={style['graph']} ref={graphRef}/>
+    {
+      selectedNode && <div className={style['modal']}>
+        {selectedNode}
+      </div>
+    }
+  </div>
 }
