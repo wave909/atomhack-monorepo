@@ -13,11 +13,28 @@ export type Task= {
   id:string,
   description:string,
   dueDate:number,
-  createDate:number,
   groupId?:string
 }
-const tasks:Task[]=[]
-router.put("/shedule",(ctx,next)=>{
+const shedules={}
+const tasks:Task[]=[{
+  id: '1',
+  description: 'Ну вот такое значит описание задачи. Кому интересно её назначат. Ну вот такое значит описание задачи. Кому интересно её назначат. Ну вот такое значит описание задачи. Кому интересно её назначат.',
+  dueDate: new Date("24.08.221").getTime(),
+},
+  {
+    id: '2',
+    description: 'Ну вот такое значит описание задачи. Кому интересно её назначат. Ну вот такое значит описание задачи. Кому интересно её назначат. Ну вот такое значит описание задачи. Кому интересно её назначат.',
+    dueDate: new Date("28.08.221").getTime(),
+  },{
+    id: '3',
+    description: 'Ну вот такое значит описание задачи. Кому интересно её назначат. Ну вот такое значит описание задачи. Кому интересно её назначат. Ну вот такое значит описание задачи. Кому интересно её назначат.',
+    dueDate: new Date("22.08.221").getTime(),
+  },{
+    id: '4',
+    description: 'Ну вот такое значит описание задачи. Кому интересно её назначат. Ну вот такое значит описание задачи. Кому интересно её назначат. Ну вот такое значит описание задачи. Кому интересно её назначат.',
+    dueDate: new Date("31.08.221").getTime(),
+  }]
+router.put("/shedule/:id",(ctx,next)=>{
   if(ctx.request.body.tasks&&Array.isArray(ctx.request.body.tasks)){
     const tasks = ctx.request.body.tasks.sort((a,b)=>a.dueDate<b.dueDate?-1:1)
     let shedule = ctx.request.body.shedule
@@ -29,12 +46,18 @@ router.put("/shedule",(ctx,next)=>{
         unsolvedTasks.push(task)
       }
     }
-    ctx.body= {newShedule: shedule}
+    shedules[ctx.params.id]=shedule
+    ctx.body= {newShedule: shedule,unsolvedTasks}
   }else {
     const newShedule = addTask(ctx.request.body.shedule, ctx.request.body.task, ctx.request.body.currentDate)
     console.log(newShedule)
+    shedules[ctx.params.id]=newShedule
     ctx.body = {newShedule}
   }
+})
+router.get("/shedule/:id",(ctx,next)=>{
+    ctx.body = shedules[ctx.params.id]
+
 })
 router.get("/tasks/:id",(ctx,next)=>{
   return tasks.filter(item=>item.groupId===ctx.params.id)

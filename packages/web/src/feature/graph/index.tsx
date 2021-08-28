@@ -18,8 +18,8 @@ export default function GraphScreen({graphvizBuf}: { graphvizBuf: [{ title: stri
     const id = e.path && e.path[1]?.id
     const title = e.path && e.path[1]?.children?.item(0)?.textContent
     console.log("ON NODE CLICK", id)
-    if (title) {
-      setSelectedNode(departmentList.find(department => department.title === id))
+    if (id) {
+      setSelectedNode(departmentList.find(department => department.title === title))
     }
   }, [])
 
