@@ -89,9 +89,8 @@ export default function GraphScreen({graphvizBuf}: { graphvizBuf: [{ title: stri
 
       graphviz(graphRef.current)
         .options({
-          fade: true,
-          width: window.innerWidth,
-          height: window.innerHeight,
+          width: graphRef.current.offsetWidth,
+          height: graphRef.current.offsetHeight,
         })
         .renderDot(graphString, () => {
           cleanEvents()
