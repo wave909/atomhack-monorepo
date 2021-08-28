@@ -23,9 +23,23 @@ export default function GraphScreen({graphvizBuf}: { graphvizBuf: [{ title: stri
     }
   }, [])
 
-  const onGraphClick = useCallback((e) => {
-    setSelectedNode(undefined)
-  }, [])
+  const modalRef = useRef<HTMLDivElement>(null)
+  useEffect(() => {
+    const pageClickEvent = (e: Event) => {
+      if (
+        modalRef.current !== null &&
+        !modalRef.current.contains(e.target as Node)
+      ) {
+        setSelectedNode(undefined)
+      }
+    }
+    if (selectedNode) {
+      window.addEventListener('click', pageClickEvent)
+    }
+    return () => {
+      window.removeEventListener('click', pageClickEvent)
+    }
+  }, [selectedNode])
 
   const cleanEvents = () => {
     nodesRef.current?.forEach(node => {
@@ -96,12 +110,14 @@ export default function GraphScreen({graphvizBuf}: { graphvizBuf: [{ title: stri
     }
   }, [graphRef, graphString])
 
-  return <div className={style['container']} onClick={onGraphClick}>
-    <div className={style['graph']} ref={graphRef}/>
+  return <>
+    <div className={style['container']}>
+      <div className={style['graph']} ref={graphRef}/>
+    </div>
     {
-      selectedNode && <div className={style['modal']}>
+      selectedNode && <div ref={modalRef} className={style['modal']}>
         <DepartmentCard department={selectedNode}/>
       </div>
     }
-  </div>
+  </>
 }
