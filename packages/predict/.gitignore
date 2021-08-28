@@ -1,0 +1,8 @@
+.idea/
+data/
+models/
+
+.env
+
+*.joblib
+__pycache__

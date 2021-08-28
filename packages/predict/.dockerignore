@@ -1,0 +1,6 @@
+docker-compose.yml
+models/
+data/
+.idea/
+__pycache__
+.DS_Store

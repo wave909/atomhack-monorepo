@@ -1,0 +1,58 @@
+.department-card{
+  width: 600px;
+  height: 400px;
+  background-color: #d9d9d9;
+  padding: 20px;
+  border-radius: 10px;
+
+  margin: 20px;
+
+  .container{
+    display: flex;
+
+
+    .left-column{
+      width: 100%;
+    }
+
+    .title{
+      font-size: 30px;
+      line-height: 36px;
+      margin-bottom: 20px;
+      font-weight: 500;
+    }
+
+    .description{
+      font-size: 18px;
+      line-height: 20px;
+    }
+
+
+    .photo{
+      width: 150px;
+      height: 200px;
+      flex-shrink: 0;
+      background-color: #ff6464;
+
+      display: flex;
+      justify-content: center;
+      align-items: center;
+    }
+
+  }
+
+  .employee-title{
+    font-size: 22px;
+    line-height: 24px;
+    margin-bottom: 10px;
+  }
+
+  .employee-list{
+    display: flex;
+    flex-direction: column;
+    overflow: scroll;
+
+    height: 120px;
+  }
+
+}

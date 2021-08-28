@@ -1,10 +1,8 @@
 import React, {useCallback, useEffect, useRef, useState} from 'react';
 import {graphviz} from 'd3-graphviz';
-/* eslint import/no-webpack-loader-syntax: off */
-import StructureDot from '!!raw-loader!../../mock/structure.dot';
 import style from './style.module.scss'
 
-export default function GraphScreen() {
+export default function GraphScreen({graphvizBuf}: {graphvizBuf: string}) {
   const graphRef = useRef<HTMLDivElement>(null)
   const nodesRef = useRef<NodeListOf<SVGGElement>>()
   const [selectedNode, setSelectedNode] = useState<string | null>(null)
@@ -35,8 +33,10 @@ export default function GraphScreen() {
       graphviz(graphRef.current)
         .options({
           fade: true,
+          width: window.innerWidth,
+          height: window.innerHeight,
         })
-        .renderDot(StructureDot, () => {
+        .renderDot(graphvizBuf, () => {
           cleanEvents()
 
           nodesRef.current = graphRef.current?.querySelectorAll(".node");
@@ -51,7 +51,7 @@ export default function GraphScreen() {
     return function () {
       cleanEvents()
     }
-  }, [graphRef])
+  }, [graphRef, graphvizBuf])
 
   return <div className={style['container']} onClick={onGraphClick}>
     <div className={style['graph']} ref={graphRef}/>
