@@ -2,11 +2,14 @@ import React, {useCallback, useEffect, useMemo, useRef, useState} from 'react';
 import {graphviz} from 'd3-graphviz';
 import style from './style.module.scss'
 import lineBreak from "../../utils/line-break";
+import {DepartmentCard} from "../../components/DepartmentCard/DepartmentCard";
+import {departmentList} from "../../components/DepartmentsTree/departmentList";
+import {Department} from "../../components/DepartmentCard/department";
 
 export default function GraphScreen({graphvizBuf}: { graphvizBuf: [{ title: string, id: string }, { title: string, id: string }][] }) {
   const graphRef = useRef<HTMLDivElement>(null)
   const nodesRef = useRef<NodeListOf<SVGGElement>>()
-  const [selectedNode, setSelectedNode] = useState<string | null>(null)
+  const [selectedNode, setSelectedNode] = useState<Department>()
 
   const onNodeClick = useCallback((e) => {
     e.stopPropagation()
@@ -16,16 +19,15 @@ export default function GraphScreen({graphvizBuf}: { graphvizBuf: [{ title: stri
     const title = e.path[1]?.children?.item(0)?.textContent
     console.log("ON NODE CLICK", id)
     if (title) {
-      setSelectedNode(title)
+      setSelectedNode(departmentList.find(department => department.title === id))
     }
   }, [])
 
   const onGraphClick = useCallback((e) => {
-    setSelectedNode(null)
+    setSelectedNode(undefined)
   }, [])
 
   const cleanEvents = () => {
-
     nodesRef.current?.forEach(node => {
       node.removeEventListener("click", onNodeClick)
     })
@@ -49,7 +51,7 @@ export default function GraphScreen({graphvizBuf}: { graphvizBuf: [{ title: stri
       node [
         shape = rect
       ]
-      
+
       ${
       uniqueEdges
         .map(edge => {
@@ -57,7 +59,7 @@ export default function GraphScreen({graphvizBuf}: { graphvizBuf: [{ title: stri
         })
         .join('\n')
       }
-      
+
       ${
       graphvizBuf
         .map(([edgeFrom, edgeTo]) => {
@@ -98,7 +100,7 @@ export default function GraphScreen({graphvizBuf}: { graphvizBuf: [{ title: stri
     <div className={style['graph']} ref={graphRef}/>
     {
       selectedNode && <div className={style['modal']}>
-        {selectedNode}
+        <DepartmentCard department={selectedNode}/>
       </div>
     }
   </div>
