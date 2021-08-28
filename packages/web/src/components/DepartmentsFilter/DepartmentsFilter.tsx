@@ -1,7 +1,12 @@
 import React, { useState } from 'react'
 import style from './DepartmentsFilter.module.scss'
-import CheckIcon from '../../img/check-icon.svg'
 import {Department} from "../DepartmentCard/department";
+
+import Checkbox from '@material-ui/core/Checkbox';
+import Button from '@material-ui/core/Button';
+import TextField from '@material-ui/core/TextField';
+import Card from '@material-ui/core/Card'
+import Paper from '@material-ui/core/Paper'
 
 interface WithClassName {
   className?: string
@@ -23,21 +28,21 @@ export const DepartmentsFilter = ({
 
   return (
     <div className={`${className || ''} ${style['department-filter']}`}>
-      <div className={style['title']}>Выберете отделы:</div>
+      <Paper className={style['title']}>Выберете отделы:</Paper>
+        <TextField
+          label={'Название отдела'}
+          type="text"
+          size={'medium'}
+          inputProps={{fontSize: '50px'}}
+          className={style['input']}
+          value={filterString}
+          onChange={(e) => setFilterString(e.target.value)}
+        />
 
-      <input
-        className={style['input']}
-        type="text"
-        placeholder={'Название отдела'}
-        value={filterString}
-        onChange={(e) => setFilterString(e.target.value)}
-      />
 
-      {chosenDepartments.length !== 0 && (
-        <div className={style['reset']} onClick={onReset}>
+        <Button disabled={chosenDepartments.length === 0 } variant="contained" color="primary" className={style['reset']} onClick={onReset}>
           Сбросить выбор
-        </div>
-      )}
+        </Button>
 
       <div className={style['departments-list']}>
         {departmentsList
@@ -55,25 +60,26 @@ export const DepartmentsFilter = ({
           .map((department) => (
             <div
               key={department.title}
-              className={style['department']}
+              className={`${style['department']} ${
+                department.path.length === 3 ?
+                  style['department_child'] : ''
+              }`}
               onClick={() => onDepartmentChoose(department)}
             >
-              <div className={`${style['check-square']}`}>
-                {chosenDepartments.find(
-                  (chosenDepartment) =>
-                    chosenDepartment.title === department.title
-                ) && <img src={CheckIcon} alt="CheckIcon" />}
-              </div>
-              <div
+              <Checkbox color='primary'
+                className={style['check-square']}
+                        checked={chosenDepartments.some((chosenDepartment) =>
+                          chosenDepartment.title === department.title)!!}
+              />
+
+              <Card
+                raised={chosenDepartments.some((chosenDepartment) =>
+                  chosenDepartment.title === department.title)!!}
                 className={`${style['text']}
-                 ${
-                   department.type === 'committee'
-                     ? style['text_committee']
-                     : ''
-                 }`}
+                 `}
               >
                 {department.title}
-              </div>
+              </Card>
             </div>
           ))}
       </div>
