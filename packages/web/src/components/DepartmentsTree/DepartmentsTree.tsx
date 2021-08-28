@@ -7,7 +7,7 @@ import GraphScreen from "../../feature/graph";
 
 export const DepartmentsTree = () => {
   const [chosenDepartments, setChosenDepartments] = useState<Department[]>([])
-  const [graphvizBuf, setGraphvizBuf] = useState('digraph G {}')
+  const [graphvizBuf, setGraphvizBuf] = useState<[string, string][]>([])
   useEffect( () => {
     const extendedDepartments = chosenDepartments.length === 0 ?
       departmentList.slice(0, departmentList.length) : chosenDepartments.slice(0, chosenDepartments.length)
@@ -29,7 +29,7 @@ export const DepartmentsTree = () => {
 
     extendedDepartments.sort((a, b) => a.path.length > b.path.length ? 1 : -1)
 
-    const newGraphvizBuf: any = []
+    const newGraphvizBuf: [string, string][] = []
     const nodes = {}
     extendedDepartments.forEach(chosenDepartment => {
       let last = nodes;
@@ -38,10 +38,10 @@ export const DepartmentsTree = () => {
       }
       const node: any = last
       node.title = chosenDepartment.title
-      newGraphvizBuf.push(`"${node.parent?.title || "root"}" -> "${node.title}"`)
+      newGraphvizBuf.push([node.parent?.title || "root", node.title])
     } )
 
-    setGraphvizBuf(newGraphvizBuf.length === 0 ? '' : `digraph G { \n\n ${newGraphvizBuf.join('\n')} \n}`)
+    setGraphvizBuf(newGraphvizBuf)
   }, [chosenDepartments])
 
   return <div className={style['page-wrapper']}>
