@@ -2,12 +2,15 @@ import React, {useEffect, useState} from 'react'
 import { DepartmentsFilter} from "../DepartmentsFilter/DepartmentsFilter";
 import {departmentList, findByPath} from "./departmentList";
 import style from './DepartmentTree.module.scss'
-import {DepartmentCard} from "../DepartmentCard/DepartmentCard";
 import {Department} from "../DepartmentCard/department";
+import GraphScreen from "../../feature/graph";
+
+/* eslint import/no-webpack-loader-syntax: off */
+import StructureDot from '!!raw-loader!../../mock/structure.dot';
 
 export const DepartmentsTree = () => {
   const [chosenDepartments, setChosenDepartments] = useState<Department[]>([])
-  const [graphvizBuf, setGraphvizBuf] = useState([])
+  const [graphvizBuf, setGraphvizBuf] = useState('')
   useEffect( () => {
     const extendedDepartments = chosenDepartments.slice(0, chosenDepartments.length)
       chosenDepartments.forEach(chosenDepartment => {
@@ -35,9 +38,9 @@ export const DepartmentsTree = () => {
       node.title = chosenDepartment.title
       newGraphvizBuf.push(`"${node.parent?.title || "root"}" -> "${node.title}"`)
     } )
-    setGraphvizBuf(newGraphvizBuf)
-  }, [chosenDepartments])
 
+    setGraphvizBuf(newGraphvizBuf.length === 0 ? '' : `digraph G { \n\n ${newGraphvizBuf.join('\n')} \n}`)
+  }, [chosenDepartments])
 
   return <div className={style['page-wrapper']}>
     <DepartmentsFilter
@@ -59,10 +62,7 @@ export const DepartmentsTree = () => {
     />
 
     <div className={style['right-column']}>
-      {graphvizBuf.map((edge) => (
-        <div>{edge}</div>
-      ))}
-
+      <GraphScreen graphvizBuf={graphvizBuf === '' ? StructureDot : graphvizBuf}/>
     </div>
   </div>
 }

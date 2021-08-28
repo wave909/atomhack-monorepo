@@ -1,9 +1,7 @@
 import React, {useCallback, useEffect, useRef} from 'react';
 import {graphviz} from 'd3-graphviz';
-/* eslint import/no-webpack-loader-syntax: off */
-import StructureDot from '!!raw-loader!../../mock/structure.dot';
 
-export default function GraphScreen() {
+export default function GraphScreen({graphvizBuf}: {graphvizBuf: string}) {
   const graphRef = useRef<HTMLDivElement>(null)
   const nodesRef = useRef<NodeListOf<SVGGElement>>()
 
@@ -27,7 +25,7 @@ export default function GraphScreen() {
           width: window.innerWidth,
           height: window.innerHeight,
         })
-        .renderDot(StructureDot, () => {
+        .renderDot(graphvizBuf, () => {
           cleanNodeClickEvent()
 
           const graph = graphRef.current?.querySelector<SVGGElement>(".graph")
