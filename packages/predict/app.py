@@ -3,7 +3,7 @@ import nltk
 import nltk.corpus
 from nltk.text import TextCollection
 
-from flask import request
+from flask import request, make_response
 from flask import Flask
 from flask import jsonify
 from flask import render_template
@@ -91,10 +91,22 @@ def classify_task(task):
 
     return analyzed
 
+@app.after_request
+def after_request(response):
+    header = response.headers
+    header['Access-Control-Allow-Origin'] = '*'
+    return response
 
 # TODO: Add message queue
-@app.route('/classify', methods=["POST", "GET"])
+@app.route('/classify', methods=["POST", "OPTIONS"])
 def post_classifier():
+    if request.method == "OPTIONS": # CORS preflight
+        response = make_response()
+        response.headers.add("Access-Control-Allow-Origin", "*")
+        response.headers.add('Access-Control-Allow-Headers', "*")
+        response.headers.add('Access-Control-Allow-Methods', "*")
+        return response
+
     tasks = None
     if "tasks" in request.json:
         tasks = request.json['tasks']

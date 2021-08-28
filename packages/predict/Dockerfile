@@ -4,6 +4,7 @@ RUN apt-get update && apt-get install -y \
 WORKDIR /app
 COPY requirements.txt .
 RUN pip install -r requirements.txt
+RUN python -m nltk.downloader punkt
 COPY . .
 ENTRYPOINT ["python"]
 CMD ["app.py"]
