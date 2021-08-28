@@ -28,7 +28,7 @@ export const DepartmentsFilter = ({
 
   return (
     <div className={`${className || ''} ${style['department-filter']}`}>
-      <Paper className={style['title']}>Выберете отделы:</Paper>
+      <Paper className={style['title']}>Выберите отделы</Paper>
         <TextField
           label={'Название отдела'}
           type="text"
