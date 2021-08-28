@@ -3,7 +3,7 @@ import {graphviz} from 'd3-graphviz';
 import style from './style.module.scss'
 import lineBreak from "../../utils/line-break";
 
-export default function GraphScreen({graphvizBuf}: {graphvizBuf: [string, string][]}) {
+export default function GraphScreen({graphvizBuf}: { graphvizBuf: [{ title: string, id: string }, { title: string, id: string }][] }) {
   const graphRef = useRef<HTMLDivElement>(null)
   const nodesRef = useRef<NodeListOf<SVGGElement>>()
   const [selectedNode, setSelectedNode] = useState<string | null>(null)
@@ -12,7 +12,9 @@ export default function GraphScreen({graphvizBuf}: {graphvizBuf: [string, string
     e.stopPropagation()
     e.preventDefault()
 
-    const title = e.target?.textContent
+    const id = e.path[1]?.id
+    const title = e.path[1]?.children?.item(0)?.textContent
+    console.log("ON NODE CLICK", id)
     if (title) {
       setSelectedNode(title)
     }
@@ -23,12 +25,24 @@ export default function GraphScreen({graphvizBuf}: {graphvizBuf: [string, string
   }, [])
 
   const cleanEvents = () => {
+
     nodesRef.current?.forEach(node => {
       node.removeEventListener("click", onNodeClick)
     })
   }
 
   const graphString = useMemo(() => {
+    const uniqueEdges: { title: string, id: string }[] = []
+    graphvizBuf.forEach(([edgeFrom, edgeTo]) => {
+      if (!uniqueEdges.find(edge => edge.id === edgeFrom.id)) {
+        uniqueEdges.push(edgeFrom)
+      }
+      if (!uniqueEdges.find(edge => edge.id === edgeTo.id)) {
+        uniqueEdges.push(edgeTo)
+      }
+    })
+
+
     return `digraph G {
       splines = ortho
 
@@ -37,12 +51,20 @@ export default function GraphScreen({graphvizBuf}: {graphvizBuf: [string, string
       ]
       
       ${
-      graphvizBuf
-        .map(([edgeFrom, edgeTo]) => {
-          return `"${lineBreak(edgeFrom)}" -> "${lineBreak(edgeTo)}"`
+      uniqueEdges
+        .map(edge => {
+          return `"${lineBreak(edge.title)}" [id="${edge.id}"]`
         })
         .join('\n')
-    }
+      }
+      
+      ${
+      graphvizBuf
+        .map(([edgeFrom, edgeTo]) => {
+          return `"${lineBreak(edgeFrom.title)}" -> "${lineBreak(edgeTo.title)}" [id="${edgeFrom}_${edgeTo}"]`
+        })
+        .join('\n')
+      }
       }`
   }, [graphvizBuf])
 

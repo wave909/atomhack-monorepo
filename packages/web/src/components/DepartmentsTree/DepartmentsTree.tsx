@@ -7,7 +7,7 @@ import GraphScreen from "../../feature/graph";
 
 export const DepartmentsTree = () => {
   const [chosenDepartments, setChosenDepartments] = useState<Department[]>([])
-  const [graphvizBuf, setGraphvizBuf] = useState<[string, string][]>([])
+  const [graphvizBuf, setGraphvizBuf] = useState<[{ title: string, id: string }, { title: string, id: string }][]>([])
   useEffect( () => {
     const extendedDepartments = chosenDepartments.length === 0 ?
       departmentList.slice(0, departmentList.length) : chosenDepartments.slice(0, chosenDepartments.length)
@@ -29,7 +29,7 @@ export const DepartmentsTree = () => {
 
     extendedDepartments.sort((a, b) => a.path.length > b.path.length ? 1 : -1)
 
-    const newGraphvizBuf: [string, string][] = []
+    const newGraphvizBuf: [{ title: string, id: string }, { title: string, id: string }][] = []
     const nodes = {}
     extendedDepartments.forEach(chosenDepartment => {
       let last = nodes;
@@ -38,7 +38,7 @@ export const DepartmentsTree = () => {
       }
       const node: any = last
       node.title = chosenDepartment.title
-      newGraphvizBuf.push([node.parent?.title || "root", node.title])
+      newGraphvizBuf.push([{id: node.parent?.title || "root", title: node.parent?.title || "root"}, {id: node.title, title: node.title}])
     } )
 
     setGraphvizBuf(newGraphvizBuf)
