@@ -87,7 +87,7 @@ export const DepartmentsFilter = ({
             </div>
           ))}
       </div>
-      <div onClick={() => setIsClassifyOpen(true)}>Создать обращение</div>
+      <Button variant={'contained'} color={'primary'}  onClick={() => setIsClassifyOpen(true)}>Создать обращение</Button>
 
       <Modal
         isOpen={isClassifyOpen}
@@ -103,7 +103,7 @@ export const DepartmentsFilter = ({
           beforeClose: modalStyle['modal-overlay__closed'],
         }}
         onRequestClose={() => setIsClassifyOpen(false)}>
-        <ChatWidget/>
+        <ChatWidget onClose={() => setIsClassifyOpen(false)}/>
       </Modal>
     </div>
   )
