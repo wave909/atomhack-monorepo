@@ -26,13 +26,14 @@ const TermCard = ({term}: {term: Term}) => {
 
 const ChatWidget = () => {
   const [value, setValue] = useState("")
-  const [response, setResponse] = useState<any>()
+  const [response, setResponse] = useState<Term[][]>()
 
   const throttled = useRef(_.throttle((newValue) => {
       const myHeaders = new Headers();
       myHeaders.append("Content-Type", "application/json");
 
       const raw = JSON.stringify({"tasks": [newValue]});
+      // TODO: Extract to common
       return fetch("https://atomhack-predict.wave909.com/classify", {
         method: 'POST',
         headers: myHeaders,

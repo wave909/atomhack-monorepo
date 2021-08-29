@@ -4,7 +4,7 @@
     "isolatedModules": true,
     "skipLibCheck": true,
 
-    "module": "commonjs",
+    "module": "ES2020",
 
     "esModuleInterop": true,
     "target": "ES6",

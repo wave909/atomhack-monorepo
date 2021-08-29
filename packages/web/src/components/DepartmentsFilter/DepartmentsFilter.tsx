@@ -83,6 +83,7 @@ export const DepartmentsFilter = ({
             </div>
           ))}
       </div>
+      <a href="/classifier" target="_blank">Демо классификатора</a>
     </div>
   )
 }

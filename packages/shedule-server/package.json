@@ -2,13 +2,26 @@
   "name": "task-server",
   "version": "1.0.0",
   "private": true,
-  "scripts": {},
+  "type": "module",
+  "exports": "./index.js",
+  "scripts": {
+    "start": "node dist/index",
+    "build": "tsc",
+    "dev": "npm run build; npm run start"
+  },
   "dependencies": {
     "@koa/router": "^10.1.1",
+    "isomorphic-fetch": "^3.0.0",
     "koa": "^2.13.1",
     "koa-body-parser": "^1.1.2",
     "koa-cors": "^0.0.16",
-    "koa-router": "^10.1.1"
+    "koa-router": "^10.1.1",
+    "lowdb": "^2.1.0"
   },
-  "devDependencies": {}
+  "devDependencies": {
+    "@types/isomorphic-fetch": "^0.0.35"
+  },
+  "engines": {
+    "node": "^12.20.0 || ^14.13.1 || >=16.0.0"
+  }
 }
