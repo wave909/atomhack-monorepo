@@ -6,6 +6,7 @@ import {DepartmentCard} from "../../components/DepartmentCard/DepartmentCard";
 import {departmentList} from "../../components/DepartmentsTree/departmentList";
 import {Department} from "../../components/DepartmentCard/department";
 import Modal from 'react-modal';
+import modalStyle from '../../styles/modal.module.scss'
 
 export default function GraphScreen({graphvizBuf}: { graphvizBuf: [{ title: string, id: string }, { title: string, id: string }][] }) {
   const graphRef = useRef<HTMLDivElement>(null)
@@ -99,14 +100,14 @@ export default function GraphScreen({graphvizBuf}: { graphvizBuf: [{ title: stri
       isOpen={!!selectedNode}
       closeTimeoutMS={200}
       className={{
-        base: style['modal'],
-        afterOpen: style['modal__opened'],
-        beforeClose: style['modal__closed'],
+        base: modalStyle['modal'],
+        afterOpen: modalStyle['modal__opened'],
+        beforeClose: modalStyle['modal__closed'],
       }}
       overlayClassName={{
-        base: style['modal-overlay'],
-        afterOpen: style['modal-overlay__opened'],
-        beforeClose: style['modal-overlay__closed'],
+        base: modalStyle['modal-overlay'],
+        afterOpen: modalStyle['modal-overlay__opened'],
+        beforeClose: modalStyle['modal-overlay__closed'],
       }}
       onRequestClose={() => setSelectedNode(undefined)}>
       <DepartmentCard

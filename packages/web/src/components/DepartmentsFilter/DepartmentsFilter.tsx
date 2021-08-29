@@ -1,5 +1,7 @@
 import React, { useState } from 'react'
+import Modal from 'react-modal';
 import style from './DepartmentsFilter.module.scss'
+import modalStyle from '../../styles/modal.module.scss'
 import {Department} from "../DepartmentCard/department";
 
 import Checkbox from '@material-ui/core/Checkbox';
@@ -7,6 +9,7 @@ import Button from '@material-ui/core/Button';
 import TextField from '@material-ui/core/TextField';
 import Card from '@material-ui/core/Card'
 import Paper from '@material-ui/core/Paper'
+import ChatWidget from "../../classifier-widget";
 
 interface WithClassName {
   className?: string
@@ -25,6 +28,7 @@ export const DepartmentsFilter = ({
   onReset: () => void
 } & WithClassName) => {
   const [filterString, setFilterString] = useState('')
+  const [isClassifyOpen, setIsClassifyOpen] = useState(false)
 
   return (
     <div className={`${className || ''} ${style['department-filter']}`}>
@@ -83,7 +87,24 @@ export const DepartmentsFilter = ({
             </div>
           ))}
       </div>
-      <a href="/classifier" target="_blank">Демо классификатора</a>
+      <div onClick={() => setIsClassifyOpen(true)}>Создать обращение</div>
+
+      <Modal
+        isOpen={isClassifyOpen}
+        closeTimeoutMS={200}
+        className={{
+          base: modalStyle['modal'],
+          afterOpen: modalStyle['modal__opened'],
+          beforeClose: modalStyle['modal__closed'],
+        }}
+        overlayClassName={{
+          base: modalStyle['modal-overlay'],
+          afterOpen: modalStyle['modal-overlay__opened'],
+          beforeClose: modalStyle['modal-overlay__closed'],
+        }}
+        onRequestClose={() => setIsClassifyOpen(false)}>
+        <ChatWidget/>
+      </Modal>
     </div>
   )
 }
