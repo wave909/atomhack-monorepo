@@ -18,7 +18,7 @@ export const Mermaid = ({ chart }: {chart: string}) => {
       console.log(Object.keys(api))
       console.log(api.getTasks()
         .map(({startTime, endTime, task}) =>
-          `${task.trim()}: ${startTime.toISOString().substring(0, 10)} - ${endTime.toISOString().substring(0, 10)}`)
+          `${task.trim()}: ${startTime.toISOString()} - ${endTime.toISOString()}`)
         .join('\n'))
     } catch (e) {
       // ignored. mermaid-js throws errors when it cannot parse the input.

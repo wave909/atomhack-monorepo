@@ -21,16 +21,15 @@ export type Task = {
   groupId?: string,
   time: number
 }
-const shedules = {}
-const adapter = new JSONFile<{tasks: Task[]}>('./data/db.json')
+const adapter = new JSONFile<{tasks: Task[], schedules: any[]}>('./data/db.json')
 const db = new Low(adapter);
 (async () => {
   await db.read()
-  db.data ||= { tasks: [] }
+  db.data ||= { tasks: [], schedules: [] }
   console.log('Loaded tasks:', db.data.tasks.length)
 })()
 
-router.put("/shedule/:id", (ctx, next) => {
+router.put("/shedule/:id", async (ctx, next) => {
   if (ctx.request.body.tasks && Array.isArray(ctx.request.body.tasks)) {
     const tasks = ctx.request.body.tasks.sort((a, b) => a.dueDate < b.dueDate ? -1 : 1)
     let shedule = ctx.request.body.shedule
@@ -42,24 +41,36 @@ router.put("/shedule/:id", (ctx, next) => {
         unsolvedTasks.push(task)
       }
     }
-    shedules[ctx.params.id] = shedule
+    db.data.schedules[ctx.params.id] = shedule
     ctx.body = {newShedule: shedule, unsolvedTasks}
   } else {
     const newShedule = addTask(ctx.request.body.shedule, ctx.request.body.task, ctx.request.body.currentDate)
     console.log(newShedule)
-    shedules[ctx.params.id] = newShedule
+    db.data.schedules[ctx.params.id] = newShedule
     ctx.body = {newShedule}
   }
+  await db.write()
 })
 router.get("/shedule/:id", (ctx, next) => {
-  ctx.body = shedules[ctx.params.id]
-
+  ctx.body = db.data.schedules[ctx.params.id]
 })
 router.get("/tasks/:id", (ctx, next) => {
   ctx.body = db.data.tasks.filter(item => item.groupId === ctx.params.id)
 })
 router.get("/tasks", (ctx, next) => {
   ctx.body = db.data.tasks
+})
+
+router.post("/tasks/group/:id", async (ctx, next) => {
+  const taskIndex = db.data.tasks.findIndex(item => item.id === ctx.params.id)
+  const task = db.data.tasks[taskIndex]
+  if(!task) {
+    throw new Error('No such task')
+  }
+  const {groupId} = ctx.request.body;
+  db.data.tasks[taskIndex] = {...task, groupId}
+  ctx.body = db.data.tasks[taskIndex]
+  await db.write()
 })
 
 router.post("/tasks", async (ctx, next) => {
@@ -103,7 +114,7 @@ router.post("/tasks", async (ctx, next) => {
       ...task,
       id: (db.data.tasks.length + createdTasks.length + 1 + index).toString(),
       groupId: department.replace(/[\d.]+ /g, ''),
-      time: 12.5 + (7.5 - Math.random() * 15)
+      time: (12.5 + (7.5 - Math.random() * 15)) * 3.6e+6
     }))
 
     createdTasks.push(...departmentTasks)

@@ -1,7 +1,7 @@
 .department-card{
   width: 1000px;
+  background-color: #EFEFEF;
 
-  background-color: #97bde8;
   padding: 20px;
   border-radius: 10px;
 
@@ -71,6 +71,7 @@
       padding: 4px;
       font-size: 20px;
       margin-bottom: 20px;
+      cursor: pointer;
     }
 
     .employee-list{

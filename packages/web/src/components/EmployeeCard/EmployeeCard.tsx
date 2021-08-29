@@ -3,10 +3,9 @@ import {Card} from "@material-ui/core";
 import style from "./EmployeeCard.module.scss";
 import {Employee} from "./employee";
 
-export const EmployeeCard = ({employee, selected, onClick}:
-                               { employee: Employee , selected?: boolean, onClick: () => void}) => {
+export const EmployeeCard = ({employee, selected, onClick,performance, setPerformance}:
+                               { employee: Employee , selected?: boolean, onClick: () => void,performance:any, setPerformance:any}) => {
 
-  const [performance, setPerformance] = useState<number>()
 
   return <Card onClick={onClick} className={`${style['employee']}`} raised={selected}>
     <div className={style['employee__photo']}/>
@@ -23,7 +22,10 @@ export const EmployeeCard = ({employee, selected, onClick}:
       <input className={`${style['input']} ${style['subtitle']}`}
              type="number"
              value={performance}
-             onChange={(e) => setPerformance(parseFloat(e.target.value))}/>
+             onChange={(e) => {
+               console.log(setPerformance)
+               setPerformance?.(parseFloat(e.target.value))
+             }}/>
     </div>
 
   </Card>
