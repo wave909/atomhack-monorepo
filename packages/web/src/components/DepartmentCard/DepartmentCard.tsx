@@ -132,15 +132,15 @@ export const DepartmentCard = (props: { department: Department | undefined }) =>
 
     <div className={style['date-pickers']}>
 
-      <div className={style['date-picker-field']}>
-        <div className={style['label']}>Загрузка до</div>
-        <TextField
-          className={style['date-picker']}
-          type="date"
-          value={workloadDate}
-          onChange={(e) => setWorkloadDate(e.target.value)}
-        />
-      </div>
+      {/*<div className={style['date-picker-field']}>*/}
+      {/*  <div className={style['label']}>Загрузка до</div>*/}
+      {/*  <TextField*/}
+      {/*    className={style['date-picker']}*/}
+      {/*    type="date"*/}
+      {/*    value={workloadDate}*/}
+      {/*    onChange={(e) => setWorkloadDate(e.target.value)}*/}
+      {/*  />*/}
+      {/*</div>*/}
 
 
       {/*<div className={style['date-picker-field']}>*/}
