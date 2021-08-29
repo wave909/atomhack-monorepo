@@ -1,12 +1,19 @@
 import React from 'react';
 import {BrowserRouter, Route, Switch} from "react-router-dom";
-import {Provider as ReduxProvider, useSelector} from 'react-redux'
+import {Provider as ReduxProvider} from 'react-redux'
 import store from "./store";
+import {DepartmentsTree} from "./components/DepartmentsTree/DepartmentsTree";
+import './styles/index.scss'
+// @ts-ignore
+import {SheduleManager} from "./shedule-manager/SheduleManager";
 
 const App = () => {
   return <BrowserRouter>
     <ReduxProvider store={store}>
-      <div>APP</div>
+      <Switch>
+        <Route path="/shedule" component={SheduleManager}/>
+        <Route path="/" component={DepartmentsTree}/>
+      </Switch>
     </ReduxProvider>
   </BrowserRouter>
 };
