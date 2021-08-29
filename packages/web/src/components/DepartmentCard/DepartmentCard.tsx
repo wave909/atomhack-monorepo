@@ -111,7 +111,7 @@ export const DepartmentCard = ({department}: { department: Department }) => {
         {!shownTasksAll&&<button onClick={() => {
           apiInstance.put(`/shedule/${department.title}`, {
             shedule,
-            tasks, currentDate: new Date().getTime()
+            unsolvedTasks, currentDate: new Date().getTime()
           }).then(({data}) => {
             console.log(data)
             setTasks(data.unsolvedTasks)
