@@ -31,6 +31,8 @@ const ChatWidget = ({onClose}: {onClose?: () => void}) => {
 
   const [successText, setSuccessText] = useState<string | null>(null)
 
+  const [quickResult, setQuickResult] = useState<string | null>(null)
+
   const throttled = useRef(_.throttle((newValue) => {
       const myHeaders = new Headers();
       myHeaders.append("Content-Type", "application/json");
@@ -48,6 +50,21 @@ const ChatWidget = ({onClose}: {onClose?: () => void}) => {
         })
     }, 200, { 'trailing': true })
   )
+
+  useEffect(() => {
+    if(!response) return
+
+    const departments = response.flat().map(it => it.intent_ambiguity.map(it => it.handled_by)).flat(2)
+
+    setQuickResult(null)
+    for(const dep of departments) {
+      if(dep.includes('Отдел жилищно-коммунального хозяйства')) {
+        setQuickResult('Авария ЖКХ? Звони в аварийную службу по номеру +7 (000) 000-00-00')
+        break;
+      }
+    }
+
+  }, [response, setQuickResult])
 
   useEffect(() => {
     throttled.current(value)
@@ -88,7 +105,11 @@ const ChatWidget = ({onClose}: {onClose?: () => void}) => {
         <textarea value={value} onChange={(ev) => setValue(ev.target.value)}/>
         <Button onClick={() => send(value)}>Отправить</Button>
       </div>
-      <div>{response?.map(terms => terms.map(term => <TermCard term={term}/>))}</div>
+      {quickResult && <p>{quickResult}</p>}
+      <details>
+        <summary>Детали интерпретации</summary>
+        {response?.map(terms => terms.map(term => <TermCard term={term}/>))}
+      </details>
     </div>
   </div>
 }
