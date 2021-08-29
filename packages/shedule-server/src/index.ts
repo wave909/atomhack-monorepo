@@ -38,7 +38,7 @@ router.put("/shedule/:id", (ctx, next) => {
     for (let task of tasks) {
       const newShedule = addTask(shedule, task, ctx.request.body.currentDate)
       shedule = newShedule || shedule
-      if (!shedule) {
+      if (!newShedule) {
         unsolvedTasks.push(task)
       }
     }

@@ -18,6 +18,7 @@ export const addTask = (machines: { [key: string]: Machine }, task: task, curren
     return null
   }
   if (isMachineCanApplyTask(machines[key], task, currentDate)) {
+    console.log(key)
     const appliedMachine = applyTaskToMachine(machines[key], task, currentDate)
     return {...machines, [key]: appliedMachine}
 
@@ -63,6 +64,7 @@ const isMachineCanApplyTask = (machine: Machine, task, currentDate) => {
   let spaces = forwardTasks.filter(it => it.dueDate > date).map(it => {
     return it.dueDate - (it.end)
   })
+  console.log(new Date(startTask),new Date(task.dueDate))
   if (!spaces.length) {
     return startTask + task.time <= task.dueDate
   }
