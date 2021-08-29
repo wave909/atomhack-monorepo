@@ -101,7 +101,7 @@ router.post("/tasks", async (ctx, next) => {
     const departmentTasks = currentBest.handled_by.map((department, index) => ({
       dueDate: arbitraryDueDate.getTime(), // can be replaced
       ...task,
-      id: (db.data.tasks.length + 1 + index).toString(),
+      id: (db.data.tasks.length + createdTasks.length + 1 + index).toString(),
       groupId: department.replace(/[\d.]+ /g, ''),
       time: 12.5 + (7.5 - Math.random() * 15)
     }))
