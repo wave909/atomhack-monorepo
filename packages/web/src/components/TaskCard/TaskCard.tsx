@@ -25,8 +25,8 @@ export const TaskCard = ({task,isChecked,setIsChecked}: {task: Task,isChecked:bo
     </div>
 
     <div className={style['description']}>{task.description}</div>
-    <div className={style['date']}>Время выполнения: {new Date(task.dueDate).toLocaleDateString()}</div>
-    <div className={style['date']}>Дата сдачи: {task.time}</div>
+    <div className={style['date']}>Дата сдачи: {new Date(task.dueDate).toLocaleDateString()}</div>
+    <div className={style['date']}> Время выполнения:{task.time/(60*60*1000)}h</div>
 
     <div className={style['task-reset']}>
       <Button size={'small'} onClick={() => setIsTaskRedirectModal(true)}>

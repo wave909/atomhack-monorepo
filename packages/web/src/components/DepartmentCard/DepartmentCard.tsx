@@ -105,7 +105,7 @@ export const DepartmentCard = (props: { department: Department | undefined }) =>
     }
   }, [solvedTasks])
   console.log(defaultShedule)
-  return <div className={style['department-card']}>
+  return <div style={{overflow:"auto"}} className={style['department-card']}>
 
     <Paper className={style['title']}>
       {department?.title}

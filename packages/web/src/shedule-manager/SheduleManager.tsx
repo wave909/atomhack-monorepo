@@ -50,16 +50,16 @@ export const convertSheduleToGantt = (shedule: Shedule, currentDate=new Date("20
   return "gantt \n title A Gantt Diagram\n" +
     "todayMarker off\n" +
     "axisFormat  %Y-%m-%d-%H \n" +
-    "dateFormat  YYYY-MM-DD HH:mm:ss.ms \n" + Object.entries(shedule).map(([key, machine]) => {
+    "dateFormat  YYYY-MM-DD HH:mm:ss.SSS \n" + Object.entries(shedule).map(([key, machine]) => {
       const tasks = `today:${currentDate.toISOString().split("Z")[0].split("T").join(" ")},${currentDate.toISOString().split("Z")[0].split("T").join(" ")}  \n` +
         machine.tasks.map(it => {
           console.log(`${new Date(it.start).toISOString().split("Z")[0].split("T").join(" ")}, ${new Date(it.end).toISOString().split("Z")[0].split("T").join(" ")}`)
-          return `${it.id} ${new Date(it.dueDate).toISOString().split(":")[0] + (it.part !== undefined ? "Part" + it.part : "")} :  ${new Date(it.start).toISOString().split("Z")[0].split("T").join(" ")}, ${new Date(it.end).toISOString().split("Z")[0].split("T").join(" ")} `
+          return `${it.id} ${new Date(it.dueDate).toISOString().split("T")[0] + (it.part !== undefined ? "Part" + it.part : "")} :  ${new Date(Math.floor(it.start)).toISOString().split("Z")[0].split("T").join(" ")}, ${new Date(Math.floor(it.end)).toISOString().split("Z")[0].split("T").join(" ")} `
     }).join("\n")
   return [key, tasks]
 }).
   map(it => {
     return `section ${it[0]} \n` + it[1]
-  }).join("\n")
+  }).join("\n")+"\n"
 
 }
