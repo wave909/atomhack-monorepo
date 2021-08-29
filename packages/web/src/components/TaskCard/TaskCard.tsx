@@ -6,8 +6,7 @@ import Modal from "react-modal";
 import modalStyle from "../../styles/modal.module.scss";
 import {TaskRedirection} from "../TaskRedirection/TaskRedirection";
 
-export const TaskCard = ({task}: {task: Task}) => {
-const [isChecked, setIsChecked] = useState(false)
+export const TaskCard = ({task,isChecked,setIsChecked}: {task: Task,isChecked:boolean,setIsChecked:any}) => {
 
   const [isTaskRedirectModalOpen, setIsTaskRedirectModal] = useState(false)
 

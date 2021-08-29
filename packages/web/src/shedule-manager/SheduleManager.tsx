@@ -4,7 +4,7 @@ import {Mermaid} from "../mermaid";
 import axios from "axios";
 
 const today = new Date()
-today.setHours(0,0,0,0)
+today.setHours(0, 0, 0, 0)
 
 export const SheduleManager = () => {
   const [currentDate, setCurrentDate] = useState(today.toISOString())
@@ -17,9 +17,9 @@ export const SheduleManager = () => {
   useEffect(() => {
     const curDate = new Date(currentDate)
 
-    curDate&&setGantt(convertSheduleToGantt(shedule,curDate))
+    curDate && setGantt(convertSheduleToGantt(shedule, curDate))
 
-  }, [shedule,currentDate])
+  }, [shedule, currentDate])
   console.log(gantt)
   return <div>
     <input value={currentDate} onChange={(e) => setCurrentDate(e.target.value)}/>
@@ -32,26 +32,34 @@ export const SheduleManager = () => {
       const taskDueDate = new Date(taskDate)
       const _taskTime = taskTime * 60 * 60 * 1000
       console.log(taskDate, taskDueDate)
-      axios.create({baseURL:process.env.REACT_APP_BASE_PATH}).put("/shedule",{shedule,tasks:[{
+      axios.create({baseURL: process.env.REACT_APP_BASE_PATH}).put("/shedule", {
+        shedule, tasks: [{
           id: taskTitle,
           dueDate: taskDueDate.getTime(),
           time: _taskTime,
           isBreakable: !!taskBreakable
-        }],currentDate: curDate.getTime()}).then(({data})=>data.newShedule&& setShedule?.(data.newShedule)).catch((e)=>{})
-    }}>Добваить задачу</button>
+        }], currentDate: curDate.getTime()
+      }).then(({data}) => data.newShedule && setShedule?.(data.newShedule)).catch((e) => {
+      })
+    }}>Добваить задачу
+    </button>
     <Mermaid chart={gantt}/>
   </div>
 }
-export const convertSheduleToGantt = (shedule: Shedule,currentDate) => {
+export const convertSheduleToGantt = (shedule: Shedule, currentDate=new Date("2021-08-29T00:00:00.000Z")) => {
   return "gantt \n title A Gantt Diagram\n" +
     "todayMarker off\n" +
-    "axisFormat  %Y-%m-%d-%H \n"+
+    "axisFormat  %Y-%m-%d-%H \n" +
     "dateFormat  YYYY-MM-DD HH:mm:ss.ms \n" + Object.entries(shedule).map(([key, machine]) => {
-      const tasks = `today:${currentDate.toISOString().split("Z")[0].split("T").join(" ")},${currentDate.toISOString().split("Z")[0].split("T").join(" ")}  \n`+
-        machine.tasks.map(it => `${it.id} ${new Date(it.dueDate).toISOString().split(":")[0]+(it.part?"Part"+it.part:"")} :  ${new Date(it.start).toISOString().split("Z")[0].split("T").join(" ")}, ${new Date(it.end).toISOString().split("Z")[0].split("T").join(" ")} `).join("\n")
-      return [key, tasks]
-    }).map(it => {
-      return `section ${it[0]} \n` + it[1]
+      const tasks = `today:${currentDate.toISOString().split("Z")[0].split("T").join(" ")},${currentDate.toISOString().split("Z")[0].split("T").join(" ")}  \n` +
+        machine.tasks.map(it => {
+          console.log(`${new Date(it.start).toISOString().split("Z")[0].split("T").join(" ")}, ${new Date(it.end).toISOString().split("Z")[0].split("T").join(" ")}`)
+          return `${it.id} ${new Date(it.dueDate).toISOString().split(":")[0] + (it.part !== undefined ? "Part" + it.part : "")} :  ${new Date(it.start).toISOString().split("Z")[0].split("T").join(" ")}, ${new Date(it.end).toISOString().split("Z")[0].split("T").join(" ")} `
     }).join("\n")
+  return [key, tasks]
+}).
+  map(it => {
+    return `section ${it[0]} \n` + it[1]
+  }).join("\n")
 
 }
