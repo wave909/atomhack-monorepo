@@ -79,6 +79,7 @@
       width: 65%;
       padding-right: 10px;
       border-right: 2px solid rgba(0, 0, 0, 0.3);
+      overflow-y: auto;
     }
 
     .task-list{
@@ -86,6 +87,7 @@
       flex-direction: column;
       width: 35%;
       padding-left: 10px;
+      overflow-y: auto;
     }
 
     .list{

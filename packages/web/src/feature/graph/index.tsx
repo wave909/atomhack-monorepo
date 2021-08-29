@@ -5,6 +5,7 @@ import lineBreak from "../../utils/line-break";
 import {DepartmentCard} from "../../components/DepartmentCard/DepartmentCard";
 import {departmentList} from "../../components/DepartmentsTree/departmentList";
 import {Department} from "../../components/DepartmentCard/department";
+import Modal from 'react-modal';
 
 export default function GraphScreen({graphvizBuf}: { graphvizBuf: [{ title: string, id: string }, { title: string, id: string }][] }) {
   const graphRef = useRef<HTMLDivElement>(null)
@@ -20,24 +21,6 @@ export default function GraphScreen({graphvizBuf}: { graphvizBuf: [{ title: stri
       setSelectedNode(departmentList.find(department => department.title === id))
     }
   }, [])
-
-  const modalRef = useRef<HTMLDivElement>(null)
-  useEffect(() => {
-    const pageClickEvent = (e: Event) => {
-      if (
-        modalRef.current !== null &&
-        !modalRef.current.contains(e.target as Node)
-      ) {
-        setSelectedNode(undefined)
-      }
-    }
-    if (selectedNode) {
-      window.addEventListener('click', pageClickEvent)
-    }
-    return () => {
-      window.removeEventListener('click', pageClickEvent)
-    }
-  }, [selectedNode])
 
   const cleanEvents = () => {
     nodesRef.current?.forEach(node => {
@@ -111,10 +94,23 @@ export default function GraphScreen({graphvizBuf}: { graphvizBuf: [{ title: stri
     <div className={style['container']}>
       <div className={style['graph']} ref={graphRef}/>
     </div>
-    {
-      selectedNode && <div ref={modalRef} className={style['modal']}>
-        <DepartmentCard department={selectedNode}/>
-      </div>
-    }
+
+    <Modal
+      isOpen={!!selectedNode}
+      closeTimeoutMS={200}
+      className={{
+        base: style['modal'],
+        afterOpen: style['modal__opened'],
+        beforeClose: style['modal__closed'],
+      }}
+      overlayClassName={{
+        base: style['modal-overlay'],
+        afterOpen: style['modal-overlay__opened'],
+        beforeClose: style['modal-overlay__closed'],
+      }}
+      onRequestClose={() => setSelectedNode(undefined)}>
+      <DepartmentCard
+        department={selectedNode}/>
+    </Modal>
   </>
 }
