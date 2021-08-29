@@ -30,4 +30,17 @@
   &__position{
     font-size: 13px;
   }
+
+  .task-info{
+    margin-left: 30px;
+
+    .workload{
+      font-size: 16px;
+      margin-bottom: 5px;
+    }
+
+    .task-count{
+      font-size: 13px;
+    }
+  }
 }

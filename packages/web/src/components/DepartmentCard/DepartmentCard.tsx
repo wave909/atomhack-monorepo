@@ -1,7 +1,7 @@
 import React, {useEffect, useMemo, useState} from "react";
 import {Department} from "./department";
 import style from './DepartmentCard.module.scss'
-import {Card, Paper} from "@material-ui/core";
+import {Card, Paper, TextField} from "@material-ui/core";
 import {EmployeeCard} from "../EmployeeCard/EmployeeCard";
 import {testTask} from "../TaskCard/task";
 import {TaskCard} from "../TaskCard/TaskCard";
@@ -51,6 +51,11 @@ export const DepartmentCard = ({department}: { department: Department }) => {
   const shownTasks = useMemo(()=>{
     return shownTasksAll?solvedTasks:unsolvedTasks
   },[shownTasksAll,tasks,unsolvedTasks])
+
+  const [todayDate, setTodayDate] = useState<string>()
+  const [workloadDate, setWorkloadDate] = useState<string>('')
+
+
   return <div className={style['department-card']}>
 
     <Paper className={style['title']}>
@@ -75,6 +80,32 @@ export const DepartmentCard = ({department}: { department: Department }) => {
         {department.description}
       </div>
     }
+
+    <div className={style['date-pickers']}>
+
+      <div className={style['date-picker-field']}>
+        <div className={style['label']}>Загрузка до</div>
+        <TextField
+          className={style['date-picker']}
+          type="date"
+          value={workloadDate}
+          onChange={(e) => setWorkloadDate(e.target.value)}
+        />
+      </div>
+
+
+      <div className={style['date-picker-field']}>
+        <div className={style['label']}>Сегодня</div>
+        <TextField
+          className={style['date-picker']}
+          type="date"
+          value={todayDate}
+          onChange={(e) => setTodayDate(e.target.value)}
+        />
+      </div>
+
+
+    </div>
 
     <div className={style['columns']}>
 
