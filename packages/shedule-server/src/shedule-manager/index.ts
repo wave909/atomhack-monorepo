@@ -5,21 +5,22 @@ export type SheduleItem = {
   dueDate: number
   time: number
   isBreakable?: boolean
-  part?: number
+  part?: number,
+  description?:string
 }
-export type task = { id: string, dueDate: number, time: number, isBreakable?: boolean }
-export type Machine = { tasks: SheduleItem[] }
+export type task = { id: string, dueDate: number, time: number, isBreakable?: boolean,description?:string }
+export type Machine = { tasks: SheduleItem[],productivity?:number }
 export type Shedule = { [key: string]: Machine }
 export const addTask = (machines: { [key: string]: Machine }, task: task, currentDate) => {
-  console.log("AAAA")
   const [key, space] = getMinimalMachine(Object.entries(machines), task.dueDate, currentDate) || [null, null]
   console.log(key, task.dueDate, task.time)
   if (!key) {
     return null
   }
-  if (isMachineCanApplyTask(machines[key], task, currentDate)) {
+  const preparedTask = {...task,time:getProductivity(machines[key],task)*task.time}
+  if (isMachineCanApplyTask(machines[key], preparedTask, currentDate)) {
     console.log(key)
-    const appliedMachine = applyTaskToMachine(machines[key], task, currentDate)
+    const appliedMachine = applyTaskToMachine(machines[key], preparedTask, currentDate)
     return {...machines, [key]: appliedMachine}
 
   } else {
@@ -36,7 +37,7 @@ export const addTask = (machines: { [key: string]: Machine }, task: task, curren
 
 }
 
-const getMinimalMachine = (machines: [string, Machine][], date, currentDate) => {
+const getMinimalMachine = (machines: [string, Machine][], date, currentDate,getProductivity=(user:Machine)=>1) => {
   return machines.map(([key, machine]) => {
     let [beforeTasks, forwardTasks] = getForwardAndBeforeTasks(machine.tasks, currentDate)
 
@@ -46,11 +47,11 @@ const getMinimalMachine = (machines: [string, Machine][], date, currentDate) => 
     const tasksBefore = forwardTasks.filter(it => it.dueDate <= date)
     const startTask = tasksBefore.length ? tasksBefore[tasksBefore.length - 1].end : currentDate
     if (spaces.length) {
-      return [key, Math.min(startTask + Math.min(...spaces), date) - startTask, forwardTasks.reduce((acc, it) => {
+      return [key,getProductivity(machine)*(Math.min(startTask + Math.min(...spaces), date) - startTask), forwardTasks.reduce((acc, it) => {
         return acc + it.time
       },0)]
     }
-    return [key, date - startTask, forwardTasks.reduce((acc, it) => {
+    return [key, getProductivity(machine)*(date - startTask), forwardTasks.reduce((acc, it) => {
       return acc + it.time
     }, 0)]
   }).sort((a, b) => a[1] < b[1] ? 1 : a[1] === b[1] ? a[2] > b[2] ? 1 : a[2] === b[2] ? 0 : -1:-1)[0]
@@ -117,4 +118,7 @@ const getForwardAndBeforeTasks = (tasks, currentDate) => {
     beforeTasks = [...beforeTasks, splittedTask[0]]
   }
   return [beforeTasks, forwardTasks]
+}
+const getProductivity=(user:Machine,task:task)=>{
+  return user.productivity||1
 }
