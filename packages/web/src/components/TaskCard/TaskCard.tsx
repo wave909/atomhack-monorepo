@@ -1,10 +1,15 @@
 import React, {useState} from 'react'
 import {Task} from "./task";
 import style from './TaskCard.module.scss'
-import {Card, Checkbox} from "@material-ui/core";
+import {Button, Card, Checkbox} from "@material-ui/core";
+import Modal from "react-modal";
+import modalStyle from "../../styles/modal.module.scss";
+import {TaskRedirection} from "../TaskRedirection/TaskRedirection";
 
 export const TaskCard = ({task}: {task: Task}) => {
 const [isChecked, setIsChecked] = useState(false)
+
+  const [isTaskRedirectModalOpen, setIsTaskRedirectModal] = useState(false)
 
   return<Card className={style['task-card']}>
     <div className={style['header']}>
@@ -23,5 +28,29 @@ const [isChecked, setIsChecked] = useState(false)
     <div className={style['description']}>{task.description}</div>
     <div className={style['date']}>Время выполнения: {new Date(task.dueDate).toLocaleDateString()}</div>
     <div className={style['date']}>Дата сдачи: {task.time}</div>
+
+    <div className={style['task-reset']}>
+      <Button size={'small'} onClick={() => setIsTaskRedirectModal(true)}>
+        Ошибка распределения?
+      </Button>
+    </div>
+
+    <Modal
+      isOpen={isTaskRedirectModalOpen}
+      closeTimeoutMS={200}
+      className={{
+        base: modalStyle['modal'],
+        afterOpen: modalStyle['modal__opened'],
+        beforeClose: modalStyle['modal__closed'],
+      }}
+      overlayClassName={{
+        base: modalStyle['modal-overlay'],
+        afterOpen: modalStyle['modal-overlay__opened'],
+        beforeClose: modalStyle['modal-overlay__closed'],
+      }}
+      onRequestClose={() => setIsTaskRedirectModal(false)}>
+      <TaskRedirection/>
+    </Modal>
+
   </Card>
 }
