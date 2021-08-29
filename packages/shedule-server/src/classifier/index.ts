@@ -15,7 +15,7 @@ const internalBaseUrl = 'http://atomhack-predict:1338'
 
 // TODO: Extract to common
 export const requestClassifications = (body): Promise<Term[][]> =>
-  fetch(`${internalBaseUrl}/classify`, {
+  fetch(`${publicBaseUrl}/classify`, {
     method: 'POST',
     body: JSON.stringify(body),
     headers: {

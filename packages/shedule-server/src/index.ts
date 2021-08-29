@@ -19,12 +19,16 @@ export type Task = {
   description: string,
   dueDate: number,
   groupId?: string,
-  // time: number
+  time: number
 }
 const shedules = {}
 const adapter = new JSONFile<{tasks: Task[]}>('./data/db.json')
-const db = new Low(adapter)
-db.data ||= { tasks: [] }
+const db = new Low(adapter);
+(async () => {
+  await db.read()
+  db.data ||= { tasks: [] }
+  console.log('Loaded tasks:', db.data.tasks.length)
+})()
 
 router.put("/shedule/:id", (ctx, next) => {
   if (ctx.request.body.tasks && Array.isArray(ctx.request.body.tasks)) {
@@ -52,7 +56,7 @@ router.get("/shedule/:id", (ctx, next) => {
 
 })
 router.get("/tasks/:id", (ctx, next) => {
-  ctx.body = db.data.tasks.find(item => item.id === ctx.params.id)
+  ctx.body = db.data.tasks.filter(item => item.groupId === ctx.params.id)
 })
 router.get("/tasks", (ctx, next) => {
   ctx.body = db.data.tasks
@@ -85,20 +89,21 @@ router.post("/tasks", async (ctx, next) => {
     if(!currentBest) {
       currentBest = {
         title: 'Неопределённый тип задачи',
-        handled_by: null,
+        handled_by: ["1. Аппарат главы администрации Сосновоборского городского округа"],
         words: []
       }
     }
 
     // TODO: Associate typical tasks with procedural documents to get due dates
-    const arbitraryDueDate = new Date(Date.now() + 720000000)
+    const arbitraryDueDate = new Date(Date.now() + 720000000 + (72000000 * 2 - Math.random() * 72000000 * 4))
 
     // TODO: Associate tasks for each department in the real task tracker
     const departmentTasks = currentBest.handled_by.map((department, index) => ({
       dueDate: arbitraryDueDate.getTime(), // can be replaced
       ...task,
       id: (db.data.tasks.length + 1 + index).toString(),
-      groupId: department.replace(/[\d.]+ /g, '')
+      groupId: department.replace(/[\d.]+ /g, ''),
+      time: 12.5 + (7.5 - Math.random() * 15)
     }))
 
     createdTasks.push(...departmentTasks)
