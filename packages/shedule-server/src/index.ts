@@ -13,26 +13,31 @@ export type Task= {
   id:string,
   description:string,
   dueDate:number,
-  groupId?:string
+  groupId?:string,
+  time:number
 }
 const shedules={}
 const tasks:Task[]=[{
   id: '1',
   description: 'Ну вот такое значит описание задачи. Кому интересно её назначат. Ну вот такое значит описание задачи. Кому интересно её назначат. Ну вот такое значит описание задачи. Кому интересно её назначат.',
-  dueDate: new Date("24.08.221").getTime(),
+  dueDate: new Date("2021-09-02").getTime(),
+  time:8*60*60*1000,
 },
   {
     id: '2',
     description: 'Ну вот такое значит описание задачи. Кому интересно её назначат. Ну вот такое значит описание задачи. Кому интересно её назначат. Ну вот такое значит описание задачи. Кому интересно её назначат.',
-    dueDate: new Date("28.08.221").getTime(),
+    dueDate: new Date("2021-09-01").getTime(),
+    time:4*60*60*1000,
   },{
     id: '3',
     description: 'Ну вот такое значит описание задачи. Кому интересно её назначат. Ну вот такое значит описание задачи. Кому интересно её назначат. Ну вот такое значит описание задачи. Кому интересно её назначат.',
-    dueDate: new Date("22.08.221").getTime(),
+    dueDate: new Date("2021-09-02").getTime(),
+    time:10*60*60*1000,
   },{
     id: '4',
     description: 'Ну вот такое значит описание задачи. Кому интересно её назначат. Ну вот такое значит описание задачи. Кому интересно её назначат. Ну вот такое значит описание задачи. Кому интересно её назначат.',
-    dueDate: new Date("31.08.221").getTime(),
+    dueDate: new Date("2021-09-01").getTime(),
+    time:5*60*60*1000,
   }]
 router.put("/shedule/:id",(ctx,next)=>{
   if(ctx.request.body.tasks&&Array.isArray(ctx.request.body.tasks)){
@@ -41,8 +46,9 @@ router.put("/shedule/:id",(ctx,next)=>{
     const unsolvedTasks=[]
     for(let task of tasks){
       const newShedule = addTask(shedule,task,ctx.request.body.currentDate)
-      shedule=newShedule||shedule
-      if(!shedule){
+      console.log(new Date(task.dueDate), task.time/(60*60*1000),newShedule)
+      shedule=(newShedule||shedule)
+      if(!newShedule){
         unsolvedTasks.push(task)
       }
     }
@@ -60,6 +66,7 @@ router.get("/shedule/:id",(ctx,next)=>{
 
 })
 router.get("/tasks/:id",(ctx,next)=>{
+  console.log(tasks)
   ctx.body= tasks.filter(item=>item)
 })
 router.post("/tasks",(ctx,next)=>{
